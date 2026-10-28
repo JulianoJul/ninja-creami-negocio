@@ -1,0 +1,16 @@
+{
+  "appId": "com.ninjacreami.minegocio",
+  "appName": "Ninja Creami",
+  "webDir": "www",
+  "backgroundColor": "#f7f1e9",
+  "android": {
+    "backgroundColor": "#f7f1e9"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK",
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}

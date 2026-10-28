@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#5c3927">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Ninja Creami · Mi negocio</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f1e9;
+    --bg-accent: #efe3d5;
+    --surface: #fffdfa;
+    --surface-2: #f7efe7;
+    --surface-3: #efe3d7;
+    --ink: #2b211b;
+    --muted: #78695f;
+    --line: #e7dbcf;
+    --brand: #70462f;
+    --brand-2: #8d5a3b;
+    --brand-ink: #ffffff;
+    --accent: #d99a6c;
+    --good: #2f7d5a;
+    --good-bg: #e3f3ea;
+    --bad: #a33328;
+    --bad-bg: #fbe9e6;
+    --warn: #8a5a12;
+    --warn-bg: #fff3d6;
+    --shadow: 0 8px 24px rgba(70, 44, 29, .07);
+    --nav-bg: rgba(255, 253, 250, .95);
+    --radius: 18px;
+    --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+    --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    --safe-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+    --safe-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, var(--bg-accent) 0, var(--bg) 240px) no-repeat, var(--bg);
+    color: var(--ink);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+  button, input, select, textarea { font: inherit; }
+  button { cursor: pointer; }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 { font-size: 20px; line-height: 1.15; margin-bottom: 2px; letter-spacing: -.01em; }
+  h2 { font-size: 19px; line-height: 1.2; margin-bottom: 4px; letter-spacing: -.01em; }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 20px 0 10px; }
+  small, .small { font-size: 12.5px; }
+  .muted { color: var(--muted); }
+  .sub { color: var(--muted); font-size: 13px; margin: 0; }
+
+  /* Barra superior */
+  .appbar {
+    background: linear-gradient(135deg, #4f2f20 0%, #70462f 55%, #8a5738 100%);
+    color: #fff;
+    padding: calc(var(--safe-top) + 14px) calc(var(--safe-right) + 16px) 15px calc(var(--safe-left) + 16px);
+  }
+  .appbar-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 43px; height: 43px; flex: 0 0 auto; border-radius: 13px;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.2);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .logo svg { width: 25px; height: 25px; }
+  .appbar h1 { color: #fff; }
+  .appbar .sub { color: rgba(255,255,255,.72); }
+
+  /* Contenido */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px calc(var(--safe-right) + 14px) calc(92px + var(--safe-bottom)) calc(var(--safe-left) + 14px);
+  }
+  .panel { display: none; }
+  .panel.on { display: block; animation: rise .18s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .panel.on { animation: none; }
+    * { scroll-behavior: auto !important; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin: 0 0 14px;
+    scroll-margin-top: 12px;
+  }
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .card-head h2 { margin-bottom: 2px; }
+  .card-head .btn { flex: 0 0 auto; }
+
+  /* Métricas */
+  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .metric { background: var(--surface-2); border-radius: 14px; padding: 12px; min-width: 0; }
+  .metric small { display: block; color: var(--muted); font-weight: 600; line-height: 1.2; margin-bottom: 5px; }
+  .metric strong { display: block; font-size: clamp(18px, 5.2vw, 23px); letter-spacing: -.02em; overflow-wrap: anywhere; }
+  .metric.good { background: var(--good-bg); }
+  .metric.good strong { color: var(--good); }
+  .metric strong.neg { color: var(--bad); }
+
+  .statstrip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  .statstrip > div { background: var(--surface-2); border-radius: 12px; padding: 10px 6px; text-align: center; min-width: 0; }
+  .statstrip small { display: block; color: var(--muted); font-size: 11.5px; line-height: 1.2; margin-bottom: 3px; }
+  .statstrip b { display: block; font-size: 15px; letter-spacing: -.01em; overflow-wrap: anywhere; }
+
+  /* Detalle del cálculo */
+  .calc { margin-top: 13px; font-size: 13px; color: var(--muted); }
+  .calc summary { cursor: pointer; color: var(--brand); font-weight: 700; padding: 2px 0; }
+  .calc-row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+  .calc-row.total { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 7px; color: var(--ink); font-weight: 700; }
+  .calc p { margin: 9px 0 0; font-size: 12px; line-height: 1.5; }
+
+  /* Formularios */
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field { min-width: 0; }
+  .field.full { grid-column: 1 / -1; }
+  label { display: block; font-size: 12.5px; font-weight: 650; color: var(--ink); margin: 0 0 5px; }
+  input, select, textarea {
+    width: 100%; min-width: 0; min-height: 47px;
+    border: 1.5px solid var(--line); border-radius: 11px;
+    background: var(--surface); color: var(--ink);
+    padding: 10px 11px; font-size: 16px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  textarea { min-height: 82px; resize: vertical; line-height: 1.4; }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(217, 154, 108, .22);
+  }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: .75; }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 21px, calc(100% - 13px) 21px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    min-height: 46px; padding: 0 16px; border: 1.5px solid transparent; border-radius: 12px;
+    font-weight: 700; font-size: 14.5px; line-height: 1.1;
+    transition: transform .08s, filter .15s, background .15s;
+  }
+  .btn:active { transform: scale(.985); }
+  .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: var(--brand-ink); box-shadow: 0 6px 14px rgba(112, 70, 47, .2); }
+  .btn.ghost { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
+  .btn.danger { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+  .btn.small { min-height: 36px; padding: 0 11px; border-radius: 10px; font-size: 12.5px; }
+  .btn.block { width: 100%; margin-top: 13px; }
+  .btn:disabled { opacity: .55; pointer-events: none; }
+  .actions .btn { flex: 1 1 auto; }
+
+  .sale-total {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--surface-2); border-radius: 12px; padding: 11px 13px; margin-top: 12px;
+  }
+  .sale-total span { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .sale-total strong { font-size: 23px; letter-spacing: -.02em; }
+  .hint { min-height: 19px; margin: 8px 0 0; font-size: 12.5px; }
+
+  /* Listas */
+  .list-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .list-item:first-child { border-top: 0; padding-top: 2px; }
+  .list-main { min-width: 0; flex: 1; }
+  .item-title { font-weight: 700; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
+  .item-sub { color: var(--muted); font-size: 12.5px; line-height: 1.5; margin-top: 4px; overflow-wrap: anywhere; }
+  .item-side { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; text-align: right; }
+  .item-side > b { font-size: 15.5px; white-space: nowrap; }
+  .item-actions { display: flex; gap: 5px; justify-content: flex-end; }
+  .amt-pos { color: var(--good); }
+  .amt-neg { color: var(--bad); }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 8px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 750; letter-spacing: .02em;
+    background: var(--surface-3); color: var(--muted); white-space: nowrap;
+  }
+  .badge.good { background: var(--good-bg); color: var(--good); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn); }
+
+  .empty {
+    color: var(--muted); font-size: 13.5px; text-align: center; line-height: 1.5;
+    padding: 20px 12px; border: 1px dashed var(--line); border-radius: 13px; background: var(--surface-2);
+  }
+
+  .preview {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px;
+    background: var(--surface-2); border-radius: 13px; padding: 11px; margin-top: 16px;
+  }
+  .preview div { min-width: 0; text-align: center; }
+  .preview small { display: block; color: var(--muted); font-size: 10.5px; line-height: 1.2; margin-bottom: 3px; }
+  .preview strong { display: block; font-size: 15px; letter-spacing: -.01em; overflow-wrap: anywhere; }
+  .preview strong.neg { color: var(--bad); }
+
+  .warnbox { background: var(--warn-bg); color: var(--warn); border-radius: 13px; padding: 12px; font-size: 12.5px; line-height: 1.55; }
+  .warnbox b { color: inherit; }
+  .backup-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; }
+  .backup-line .badge { font-size: 11.5px; padding: 5px 10px; }
+  .danger-zone { border-color: rgba(163, 51, 40, .25); }
+  .danger-zone h2 { color: var(--bad); }
+  .appfoot { text-align: center; color: var(--muted); font-size: 11.5px; padding: 4px 0 2px; }
+
+  /* Navegación inferior */
+  .bottom-nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+    padding: 6px calc(var(--safe-right) + 6px) calc(6px + var(--safe-bottom)) calc(var(--safe-left) + 6px);
+  }
+  .bottom-nav-inner { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 0; min-height: 51px; padding: 5px 1px;
+    border: 0; border-radius: 12px; background: transparent; color: var(--muted);
+    font-size: clamp(9px, 2.7vw, 10.5px); font-weight: 700; line-height: 1;
+  }
+  .tab svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tab.on { color: var(--brand); background: var(--surface-2); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  /* Aviso flotante */
+  #toast {
+    position: fixed; left: 50%; bottom: calc(82px + var(--safe-bottom)); z-index: 60;
+    transform: translate(-50%, 16px); width: min(92vw, 420px);
+    background: #2b211b; color: #fff; text-align: center;
+    padding: 11px 15px; border-radius: 13px; font-size: 13.5px; font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* Carga inicial */
+  .boot {
+    position: fixed; inset: 0; z-index: 100;
+    display: grid; place-content: center; justify-items: center; gap: 12px;
+    background: var(--bg); color: var(--muted); font-size: 13px;
+    transition: opacity .22s;
+  }
+  body.ready .boot { opacity: 0; pointer-events: none; }
+  .spinner { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--brand); animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  body.ready .spinner { animation-play-state: paused; }
+
+  @media (max-width: 359px) {
+    .fields { grid-template-columns: 1fr; }
+    .metric strong { font-size: 18px; }
+    .bottom-nav .tab { font-size: 8.5px; }
+  }
+  @media (min-width: 620px) {
+    .appbar { padding-top: calc(var(--safe-top) + 18px); padding-bottom: 18px; }
+    main { padding-top: 18px; }
+    .card { padding: 20px; }
+    .metrics { gap: 12px; }
+    .metric strong { font-size: 24px; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15100d;
+      --bg-accent: #1e1612;
+      --surface: #211915;
+      --surface-2: #2b211b;
+      --surface-3: #35281f;
+      --ink: #f3e9e0;
+      --muted: #b7a79a;
+      --line: #3a2c23;
+      --brand: #d09a74;
+      --brand-2: #b57a52;
+      --brand-ink: #1c120c;
+      --accent: #d99a6c;
+      --good: #7fd3a6;
+      --good-bg: #17352a;
+      --bad: #ff9c91;
+      --bad-bg: #3d1d1a;
+      --warn: #f0c675;
+      --warn-bg: #3a2c12;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
+      --nav-bg: rgba(33, 25, 21, .96);
+    }
+    .appbar { background: linear-gradient(135deg, #2f1d14 0%, #452a1c 55%, #58351f 100%); }
+    .btn.primary { color: var(--brand-ink); box-shadow: 0 6px 14px rgba(0,0,0,.3); }
+    #toast { background: #f3e9e0; color: #2b211b; }
+  }
+</style>
+</head>
+<body>
+<div class="boot" id="boot"><div class="spinner" aria-hidden="true"></div><p>Cargando tu negocio…</p></div>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7.5 8h9l-1 12.5h-7L7.5 8Z"/>
+        <path d="M6.8 8h10.4"/>
+        <path d="M9.6 5.2c0-1 .8-1.8 1.8-1.8.4 0 .8.1 1.1.3.4-.5 1-.8 1.7-.8 1.2 0 2.2 1 2.2 2.2V8H9.6V5.2Z"/>
+        <path d="M9.6 12c1.5.9 3.3.9 4.8 0"/>
+      </svg>
+    </div>
+    <div>
+      <h1>Ninja Creami</h1>
+      <p class="sub">Mi negocio · costos, ventas y stock</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- RESUMEN -->
+  <section id="home" class="panel on">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Resumen</h2>
+          <p class="sub">Resultados acumulados de tu negocio</p>
+        </div>
+        <span class="badge good" id="lowStockBadge">Inventario al día</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><small>Ventas</small><strong id="totSales">$0.00</strong></div>
+        <div class="metric"><small>Costo de productos</small><strong id="totCogs">$0.00</strong></div>
+        <div class="metric"><small>Gastos operativos</small><strong id="totOpEx">$0.00</strong></div>
+        <div class="metric good"><small>Ganancia estimada</small><strong id="totProfit">$0.00</strong></div>
+      </div>
+      <details class="calc">
+        <summary>Cómo se calcula</summary>
+        <div class="calc-row"><span>Ventas</span><span id="calcSales">$0.00</span></div>
+        <div class="calc-row"><span>− Costo de productos vendidos</span><span id="calcCogs">$0.00</span></div>
+        <div class="calc-row"><span>− Gastos operativos</span><span id="calcOpEx">$0.00</span></div>
+        <div class="calc-row total"><span>= Ganancia estimada</span><span id="calcProfit">$0.00</span></div>
+        <div class="calc-row"><span>Gastos registrados (todos)</span><span id="calcAllExp">$0.00</span></div>
+        <div class="calc-row"><span>Efectivo neto (ventas − todos los gastos)</span><span id="calcCash">$0.00</span></div>
+        <p>Los gastos de <b>Ingredientes</b> y <b>Empaques y utensilios</b> no se restan otra vez: su costo ya está incluido en el costo por porción de cada venta. No sustituye la contabilidad formal.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Registrar venta</h2>
+      <form id="saleForm" novalidate>
+        <div class="fields">
+          <div class="field"><label for="sDate">Fecha</label><input id="sDate" type="date" required></div>
+          <div class="field"><label for="sRecipe">Sabor</label><select id="sRecipe" required></select></div>
+          <div class="field"><label for="sQty">Porciones</label><input id="sQty" type="number" inputmode="numeric" min="1" step="1" value="1" required></div>
+          <div class="field"><label for="sPrice">Precio por porción ($)</label><input id="sPrice" type="number" inputmode="decimal" min="0" step=".01" required></div>
+          <div class="field"><label for="sMethod">Tipo de venta</label><select id="sMethod"><option>Venta directa</option><option>Pedido</option></select></div>
+          <div class="field"><label for="sNote">Nota (opcional)</label><input id="sNote" placeholder="Cliente o pedido"></div>
+        </div>
+        <div class="sale-total"><span>Total de la venta</span><strong id="saleTotal">$0.00</strong></div>
+        <p id="sHint" class="muted hint"></p>
+        <button class="btn primary block" type="submit">Guardar venta</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Actividad reciente</h2>
+      <div id="recent" class="empty">Todavía no hay actividad.</div>
+    </div>
+  </section>
+
+  <!-- RECETAS -->
+  <section id="recipes" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Mis recetas</h2>
+          <p class="sub" id="recipeSummary">Costo y margen por porción</p>
+        </div>
+        <button class="btn ghost small" type="button" id="newRecipe">+ Nueva</button>
+      </div>
+      <div id="recipeList"></div>
+    </div>
+
+    <div class="card" id="recipeFormCard">
+      <h2 id="rTitle">Añadir receta</h2>
+      <form id="recipeForm" novalidate>
+        <input id="rId" type="hidden">
+        <div class="fields">
+          <div class="field full"><label for="rName">Nombre del sabor</label><input id="rName" required placeholder="Ej. Chocolate"></div>
+        </div>
+
+        <h3>Ingredientes y costos</h3>
+        <div class="fields">
+          <div class="field"><label for="rMilk">Leche en polvo (g)</label><input id="rMilk" type="number" inputmode="decimal" min="0" step=".1" value="150" required></div>
+          <div class="field"><label for="rMilkPrice">Costo leche por kg ($)</label><input id="rMilkPrice" type="number" inputmode="decimal" min="0" step=".01" value="14" required></div>
+          <div class="field"><label for="rBase">Base por receta ($)</label><input id="rBase" type="number" inputmode="decimal" min="0" step=".01" value="1.4" required></div>
+          <div class="field"><label for="rEss">Esencia por envase ($)</label><input id="rEss" type="number" inputmode="decimal" min="0" step=".01" value="1" required></div>
+          <div class="field"><label for="rEssYield">Recetas por envase de esencia</label><input id="rEssYield" type="number" inputmode="decimal" min=".01" step="any" value="50" required></div>
+          <div class="field"><label for="rStab">Estabilizante por envase ($)</label><input id="rStab" type="number" inputmode="decimal" min="0" step=".01" value="1.6" required></div>
+          <div class="field"><label for="rStabYield">Recetas por envase estabilizante</label><input id="rStabYield" type="number" inputmode="decimal" min=".01" step="any" value="50" required></div>
+          <div class="field"><label for="rOther">Otros costos por receta ($)</label><input id="rOther" type="number" inputmode="decimal" min="0" step=".01" value="0" required></div>
+        </div>
+
+        <h3>Presentación y precio</h3>
+        <div class="fields">
+          <div class="field"><label for="rYield">Porciones por receta</label><input id="rYield" type="number" inputmode="decimal" min=".01" step="any" value="1" required></div>
+          <div class="field"><label for="rCone">Barquilla por porción ($)</label><input id="rCone" type="number" inputmode="decimal" min="0" step=".001" value=".269" required></div>
+          <div class="field"><label for="rNapkin">Servilleta por porción ($)</label><input id="rNapkin" type="number" inputmode="decimal" min="0" step=".001" value=".01" required></div>
+          <div class="field"><label for="rPrice">Precio de venta por porción ($)</label><input id="rPrice" type="number" inputmode="decimal" min="0" step=".01" value="5" required></div>
+          <div class="field full"><label for="rNotes">Notas (opcional)</label><textarea id="rNotes" placeholder="Detalles de preparación, cliente frecuente…"></textarea></div>
+        </div>
+
+        <div class="preview">
+          <div><small>Costo / porción</small><strong id="rPreviewCost">$0.00</strong></div>
+          <div><small>Precio</small><strong id="rPreviewPrice">$0.00</strong></div>
+          <div><small>Margen</small><strong id="rPreviewMargin">$0.00</strong></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit">Guardar receta</button>
+          <button class="btn ghost" type="button" id="rClear">Limpiar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- VENTAS -->
+  <section id="sales" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Ventas</h2><p class="sub">Historial de todas tus ventas</p></div>
+        <button class="btn ghost small" type="button" id="salesCsv">CSV</button>
+      </div>
+      <div class="statstrip">
+        <div><small>Total vendido</small><b id="salesTotal">$0.00</b></div>
+        <div><small>Ventas</small><b id="salesCount">0</b></div>
+        <div><small>Porciones</small><b id="salesQty">0</b></div>
+      </div>
+      <div id="salesList"></div>
+    </div>
+  </section>
+
+  <!-- GASTOS -->
+  <section id="expenses" class="panel">
+    <div class="card">
+      <h2>Registrar gasto</h2>
+      <form id="expenseForm" novalidate>
+        <div class="fields">
+          <div class="field"><label for="eDate">Fecha</label><input id="eDate" type="date" required></div>
+          <div class="field"><label for="eAmount">Monto ($)</label><input id="eAmount" type="number" inputmode="decimal" min=".01" step=".01" placeholder="0.00" required></div>
+          <div class="field"><label for="eCategory">Categoría</label>
+            <select id="eCategory">
+              <option>Ingredientes</option>
+              <option>Empaques y utensilios</option>
+              <option>Equipo</option>
+              <option>Transporte</option>
+              <option>Servicios</option>
+              <option>Marketing</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="field"><label for="ePayment">Método de pago</label>
+            <select id="ePayment"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select>
+          </div>
+          <div class="field full"><label for="eDesc">Descripción</label><input id="eDesc" required placeholder="Ej. compra de leche en polvo"></div>
+        </div>
+        <button class="btn primary block" type="submit">Guardar gasto</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Gastos registrados</h2><p class="sub">Todos los movimientos</p></div>
+        <button class="btn ghost small" type="button" id="expensesCsv">CSV</button>
+      </div>
+      <div class="statstrip">
+        <div><small>Total</small><b id="expTotal">$0.00</b></div>
+        <div><small>Registros</small><b id="expCount">0</b></div>
+        <div><small>Promedio</small><b id="expAvg">$0.00</b></div>
+      </div>
+      <div id="expenseList"></div>
+    </div>
+  </section>
+
+  <!-- INVENTARIO -->
+  <section id="stock" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Inventario</h2><p class="sub">Existencias y alertas de reposición</p></div>
+        <button class="btn ghost small" type="button" id="stockCsv">CSV</button>
+      </div>
+      <div class="statstrip">
+        <div><small>Artículos</small><b id="stockCount">0</b></div>
+        <div><small>Por reponer</small><b id="stockLow">0</b></div>
+        <div><small>Valor reposición</small><b id="stockValue">$0.00</b></div>
+      </div>
+      <p class="muted small" style="margin:0 0 12px">El inventario se actualiza a mano: las ventas no descuentan existencias automáticamente.</p>
+      <div id="stockList"></div>
+    </div>
+
+    <div class="card" id="stockFormCard">
+      <h2 id="iTitle">Añadir artículo</h2>
+      <form id="stockForm" novalidate>
+        <input id="iId" type="hidden">
+        <div class="fields">
+          <div class="field full"><label for="iName">Ingrediente o artículo</label><input id="iName" required placeholder="Ej. leche en polvo"></div>
+          <div class="field"><label for="iQty">Cantidad disponible</label><input id="iQty" type="number" inputmode="decimal" min="0" step=".01" required></div>
+          <div class="field"><label for="iUnit">Unidad</label>
+            <select id="iUnit"><option>g</option><option>kg</option><option>ml</option><option>L</option><option>unidades</option><option>envases</option><option>paquetes</option></select>
+          </div>
+          <div class="field"><label for="iMin">Alerta al llegar a</label><input id="iMin" type="number" inputmode="decimal" min="0" step=".01" value="1" required></div>
+          <div class="field"><label for="iCost">Costo de reposición ($)</label><input id="iCost" type="number" inputmode="decimal" min="0" step=".01" value="0"></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit">Guardar artículo</button>
+          <button class="btn ghost" type="button" id="iClear">Limpiar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- RESPALDO -->
+  <section id="backup" class="panel">
+    <div class="card">
+      <h2>Respaldo y exportación</h2>
+      <p class="muted small">Tus datos se guardan únicamente en este teléfono. No hay cuenta ni sincronización automática.</p>
+      <div class="warnbox"><b>Importante:</b> crea una copia JSON con frecuencia y antes de cambiar de teléfono, borrar los datos de la app o desinstalarla. Sin copia, la información se puede perder.</div>
+      <div class="backup-line"><span class="muted small">Última copia:</span><span class="badge" id="lastBackup">Aún no has creado una copia.</span></div>
+      <div class="actions">
+        <button class="btn primary" type="button" id="backupBtn">Compartir copia JSON</button>
+        <button class="btn ghost" type="button" id="restoreBtn">Restaurar copia</button>
+        <input id="restoreFile" type="file" accept=".json,application/json" hidden>
+      </div>
+      <p class="muted small" style="margin:10px 0 0">En Android se abrirá el menú para guardar el archivo en Archivos, Drive o enviarlo. En el navegador se descargará directamente.</p>
+    </div>
+
+    <div class="card">
+      <h2>Exportar para Excel / Google Sheets</h2>
+      <p class="muted small">Cada botón genera un archivo CSV que puedes abrir en hojas de cálculo.</p>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="recipeCsv">Recetas CSV</button>
+        <button class="btn ghost" type="button" id="allSalesCsv">Ventas CSV</button>
+        <button class="btn ghost" type="button" id="allExpensesCsv">Gastos CSV</button>
+        <button class="btn ghost" type="button" id="stockCsv2">Inventario CSV</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Almacenamiento</h2>
+      <p id="status" class="muted small">Guardado local</p>
+      <p class="muted small" id="storageNote" style="margin-bottom:0">Los datos viajan con la app y no se suben a internet.</p>
+    </div>
+
+    <div class="card danger-zone">
+      <h2>Zona de peligro</h2>
+      <p class="muted small">Borra todas las recetas, ventas, gastos e inventario de este teléfono. Esta acción no se puede deshacer.</p>
+      <button class="btn danger" type="button" id="wipe">Borrar todos los datos</button>
+    </div>
+
+    <p class="appfoot">Ninja Creami · Mi negocio · v1.0.0</p>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Secciones de la app">
+  <div class="bottom-nav-inner">
+    <button class="tab on" type="button" data-p="home" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button class="tab" type="button" data-p="recipes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/><path d="M4 17.5h16"/><path d="M8 6.5h8M8 10h8"/></svg>
+      <span>Recetas</span>
+    </button>
+    <button class="tab" type="button" data-p="sales">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-6"/></svg>
+      <span>Ventas</span>
+    </button>
+    <button class="tab" type="button" data-p="expenses">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 16.5v-9Z"/><path d="M4 8h16"/><path d="M16 13.5h.01"/></svg>
+      <span>Gastos</span>
+    </button>
+    <button class="tab" type="button" data-p="stock">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5"/><path d="M12 12v9"/></svg>
+      <span>Stock</span>
+    </button>
+    <button class="tab" type="button" data-p="backup">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>Copia</span>
+    </button>
+  </div>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const KEY = 'ninjaCreamiPersonal_v1';
+  const COGS_CATEGORIES = new Set(['Ingredientes', 'Empaques y utensilios']);
+  const $ = id => document.getElementById(id);
+  const num = (value, fallback = 0) => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+  };
+  const money = value => {
+    const n = num(value);
+    const body = Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return (n < 0 ? '-$' : '$') + body;
+  };
+  const qty = value => num(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const today = () => {
+    const now = new Date();
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const sum = (rows, fn) => rows.reduce((total, row) => total + num(fn(row)), 0);
+
+  const cap = window.Capacitor;
+  const isNative = !!(cap && typeof cap.isNativePlatform === 'function' && cap.isNativePlatform());
+  const plugin = name => {
+    try {
+      if (!isNative || !cap.Plugins || !cap.Plugins[name]) return null;
+      return cap.Plugins[name];
+    } catch (_) {
+      return null;
+    }
+  };
+  const Preferences = plugin('Preferences');
+  const Filesystem = plugin('Filesystem');
+  const Share = plugin('Share');
+  const NativeApp = plugin('App');
+  const SystemBars = plugin('SystemBars');
+
+  const SEED_NAMES = ['Chocolate', 'Galleta', 'Mantecado', 'Chicle', 'Fresa', 'Sabor 6', 'Sabor 7', 'Sabor 8'];
+  const seedRecipes = () => SEED_NAMES.map(name => ({
+    id: uid(), name, milk: 150, milkPrice: 14, base: 1.4, ess: 1, essYield: 50,
+    stab: 1.6, stabYield: 50, yield: 1, cone: .269, napkin: .01, other: 0, price: 5, notes: ''
+  }));
+  const emptyData = () => ({ recipes: seedRecipes(), sales: [], expenses: [], stock: [], meta: {} });
+
+  let data = emptyData();
+  let loaded = false;
+  let currentPanel = 'home';
+  let toastTimer = null;
+
+  /* ---------- Datos ---------- */
+  function normalize(source) {
+    const src = source && typeof source === 'object' ? source : {};
+    return {
+      recipes: Array.isArray(src.recipes) ? src.recipes : seedRecipes(),
+      sales: Array.isArray(src.sales) ? src.sales : [],
+      expenses: Array.isArray(src.expenses) ? src.expenses : [],
+      stock: Array.isArray(src.stock) ? src.stock : [],
+      meta: src.meta && typeof src.meta === 'object' ? src.meta : {}
+    };
+  }
+
+  function readLocal() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function readNative() {
+    if (!Preferences) return null;
+    try {
+      const result = await Preferences.get({ key: KEY });
+      return result && result.value ? JSON.parse(result.value) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function loadData() {
+    const [native, local] = await Promise.all([readNative(), Promise.resolve(readLocal())]);
+    const stamp = value => num(value && value.meta && value.meta.updatedAt);
+    let chosen = null;
+    if (native && local) chosen = stamp(local) > stamp(native) ? local : native;
+    else chosen = native || local;
+
+    if (!chosen) {
+      data = emptyData();
+      save();
+      return;
+    }
+
+    data = normalize(chosen);
+    const json = JSON.stringify(data);
+    try { localStorage.setItem(KEY, json); } catch (_) {}
+    if (Preferences) Preferences.set({ key: KEY, value: json }).catch(() => {});
+  }
+
+  function save(message) {
+    data.meta = Object.assign({}, data.meta, { updatedAt: Date.now() });
+    const json = JSON.stringify(data);
+    try { localStorage.setItem(KEY, json); } catch (_) {}
+    if (Preferences) {
+      Preferences.set({ key: KEY, value: json }).catch(() => {
+        toast('No se pudo guardar en el almacenamiento del teléfono.');
+      });
+    }
+    if (message) toast(message);
+    if (loaded) renderStatus();
+  }
+
+  function toast(message) {
+    const el = $('toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  /* ---------- Cálculos ---------- */
+  function cost(recipe) {
+    const milk = num(recipe.milk) * num(recipe.milkPrice) / 1000;
+    const essence = num(recipe.essYield) ? num(recipe.ess) / num(recipe.essYield) : 0;
+    const stabilizer = num(recipe.stabYield) ? num(recipe.stab) / num(recipe.stabYield) : 0;
+    const perRecipe = milk + num(recipe.base) + essence + stabilizer + num(recipe.other);
+    return perRecipe / Math.max(.01, num(recipe.yield, 1)) + num(recipe.cone) + num(recipe.napkin);
+  }
+
+  function totals() {
+    const sales = sum(data.sales, row => num(row.qty) * num(row.price));
+    const cogs = sum(data.sales, row => num(row.qty) * num(row.unitCost));
+    const allExpenses = sum(data.expenses, row => num(row.amount));
+    const opExpenses = sum(data.expenses.filter(row => !COGS_CATEGORIES.has(row.category)), row => num(row.amount));
+    return { sales, cogs, allExpenses, opExpenses, profit: sales - cogs - opExpenses, cash: sales - allExpenses };
+  }
+
+  /* ---------- Vistas ---------- */
+  function showPanel(id) {
+    const target = document.getElementById(id) ? id : 'home';
+    currentPanel = target;
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.toggle('on', panel.id === target));
+    document.querySelectorAll('.tab').forEach(tab => {
+      const active = tab.dataset.p === target;
+      tab.classList.toggle('on', active);
+      if (active) tab.setAttribute('aria-current', 'page');
+      else tab.removeAttribute('aria-current');
+    });
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (target === 'backup') renderStatus();
+  }
+
+  function renderAll() {
+    fillRecipeSelect();
+    renderRecipes();
+    renderSales();
+    renderExpenses();
+    renderStock();
+    renderActivity();
+    renderDashboard();
+    renderStatus();
+    setSalePrice();
+    updateSaleTotal();
+    previewRecipe();
+    if (!$('sDate').value) $('sDate').value = today();
+    if (!$('eDate').value) $('eDate').value = today();
+  }
+
+  function renderDashboard() {
+    const t = totals();
+    $('totSales').textContent = money(t.sales);
+    $('totCogs').textContent = money(t.cogs);
+    $('totOpEx').textContent = money(t.opExpenses);
+    $('totProfit').textContent = money(t.profit);
+    $('totProfit').classList.toggle('neg', t.profit < -0.004);
+    $('calcSales').textContent = money(t.sales);
+    $('calcCogs').textContent = money(t.cogs);
+    $('calcOpEx').textContent = money(t.opExpenses);
+    $('calcProfit').textContent = money(t.profit);
+    $('calcAllExp').textContent = money(t.allExpenses);
+    $('calcCash').textContent = money(t.cash);
+
+    const low = data.stock.filter(item => num(item.qty) <= num(item.min)).length;
+    const badge = $('lowStockBadge');
+    badge.textContent = low ? `${low} por reponer` : 'Inventario al día';
+    badge.className = 'badge ' + (low ? 'warn' : 'good');
+  }
+
+  function renderRecipes() {
+    const list = $('recipeList');
+    $('recipeSummary').textContent = `${data.recipes.length} receta${data.recipes.length === 1 ? '' : 's'} · costo y margen por porción`;
+    if (!data.recipes.length) {
+      list.innerHTML = '<div class="empty">Añade tu primera receta para empezar.</div>';
+      return;
+    }
+    list.innerHTML = data.recipes.map(recipe => {
+      const recipeCost = cost(recipe);
+      const price = num(recipe.price);
+      const margin = price - recipeCost;
+      const marginPct = price > 0 ? Math.round(margin / price * 100) : 0;
+      return `<div class="list-item">
+        <div class="list-main">
+          <div class="item-title">${esc(recipe.name)}</div>
+          <div class="item-sub">Costo ${money(recipeCost)} · Precio ${money(price)}<br>Margen ${money(margin)} por porción ${price > 0 ? `(${marginPct}%)` : ''}</div>
+        </div>
+        <div class="item-side">
+          <span class="badge ${margin < 0 ? 'bad' : 'good'}">${margin < 0 ? 'Pérdida' : 'Rentable'}</span>
+          <div class="item-actions">
+            <button class="btn ghost small" type="button" data-edit-r="${esc(recipe.id)}">Editar</button>
+            <button class="btn danger small" type="button" data-del-r="${esc(recipe.id)}">Borrar</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderSales() {
+    const total = sum(data.sales, row => num(row.qty) * num(row.price));
+    const portions = sum(data.sales, row => num(row.qty));
+    $('salesTotal').textContent = money(total);
+    $('salesCount').textContent = data.sales.length;
+    $('salesQty').textContent = qty(portions);
+    const list = $('salesList');
+    if (!data.sales.length) {
+      list.innerHTML = '<div class="empty">Todavía no hay ventas registradas.</div>';
+      return;
+    }
+    list.innerHTML = [...data.sales].reverse().map(sale => {
+      const saleTotal = num(sale.qty) * num(sale.price);
+      return `<div class="list-item">
+        <div class="list-main">
+          <div class="item-title">${esc(sale.flavor)} · ${qty(sale.qty)} porción(es)</div>
+          <div class="item-sub">${esc(sale.date)} · ${esc(sale.method || 'Venta directa')}${sale.note ? ' · ' + esc(sale.note) : ''}<br>Costo guardado ${money(num(sale.qty) * num(sale.unitCost))}</div>
+        </div>
+        <div class="item-side">
+          <b>${money(saleTotal)}</b>
+          <button class="btn danger small" type="button" data-del-s="${esc(sale.id)}">Borrar</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderExpenses() {
+    const total = sum(data.expenses, row => num(row.amount));
+    $('expTotal').textContent = money(total);
+    $('expCount').textContent = data.expenses.length;
+    $('expAvg').textContent = money(data.expenses.length ? total / data.expenses.length : 0);
+    const list = $('expenseList');
+    if (!data.expenses.length) {
+      list.innerHTML = '<div class="empty">Todavía no hay gastos registrados.</div>';
+      return;
+    }
+    list.innerHTML = [...data.expenses].reverse().map(expense => `<div class="list-item">
+      <div class="list-main">
+        <div class="item-title">${esc(expense.desc)}</div>
+        <div class="item-sub">${esc(expense.date)} · ${esc(expense.category || 'Otro')} · ${esc(expense.payment || '')}</div>
+      </div>
+      <div class="item-side">
+        <b class="amt-neg">${money(expense.amount)}</b>
+        <button class="btn danger small" type="button" data-del-e="${esc(expense.id)}">Borrar</button>
+      </div>
+    </div>`).join('');
+  }
+
+  function renderStock() {
+    const low = data.stock.filter(item => num(item.qty) <= num(item.min)).length;
+    $('stockCount').textContent = data.stock.length;
+    $('stockLow').textContent = low;
+    $('stockValue').textContent = money(sum(data.stock, item => num(item.cost)));
+    const list = $('stockList');
+    if (!data.stock.length) {
+      list.innerHTML = '<div class="empty">Añade leche en polvo, base, esencias, estabilizante, barquillas y servilletas.</div>';
+      return;
+    }
+    list.innerHTML = data.stock.map(item => {
+      const isLow = num(item.qty) <= num(item.min);
+      return `<div class="list-item">
+        <div class="list-main">
+          <div class="item-title">${esc(item.name)} <span class="badge ${isLow ? 'bad' : 'good'}">${isLow ? 'Reponer' : 'OK'}</span></div>
+          <div class="item-sub">${qty(item.qty)} ${esc(item.unit)} · Alerta en ${qty(item.min)} ${esc(item.unit)}${num(item.cost) ? ' · Reposición ' + money(item.cost) : ''}</div>
+        </div>
+        <div class="item-side">
+          <div class="item-actions">
+            <button class="btn ghost small" type="button" data-edit-i="${esc(item.id)}">Editar</button>
+            <button class="btn danger small" type="button" data-del-i="${esc(item.id)}">Borrar</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderActivity() {
+    const activity = [
+      ...data.sales.map(sale => ({
+        date: sale.date || '', title: 'Venta · ' + sale.flavor,
+        sub: `${qty(sale.qty)} porción(es) · ${sale.method || 'Venta directa'}`,
+        amount: num(sale.qty) * num(sale.price)
+      })),
+      ...data.expenses.map(expense => ({
+        date: expense.date || '', title: 'Gasto · ' + expense.desc,
+        sub: expense.category || 'Otro', amount: -num(expense.amount)
+      }))
+    ].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 5);
+
+    const el = $('recent');
+    if (!activity.length) {
+      el.className = 'empty';
+      el.textContent = 'Todavía no hay actividad.';
+      return;
+    }
+    el.className = '';
+    el.innerHTML = activity.map(item => `<div class="list-item">
+      <div class="list-main">
+        <div class="item-title">${esc(item.title)}</div>
+        <div class="item-sub">${esc(item.date)} · ${esc(item.sub)}</div>
+      </div>
+      <div class="item-side"><b class="${item.amount < 0 ? 'amt-neg' : 'amt-pos'}">${money(item.amount)}</b></div>
+    </div>`).join('');
+  }
+
+  function renderStatus() {
+    $('status').textContent = `Guardado local · ${data.recipes.length} recetas · ${data.sales.length} ventas · ${data.expenses.length} gastos · ${data.stock.length} artículos.`;
+    const last = data.meta && data.meta.lastBackup;
+    $('lastBackup').textContent = last ? formatWhen(last) : 'Aún no has creado una copia.';
+    $('lastBackup').className = 'badge ' + (last ? 'good' : 'warn');
+  }
+
+  function formatWhen(iso) {
+    try {
+      return new Date(iso).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' });
+    } catch (_) {
+      return String(iso);
+    }
+  }
+
+  /* ---------- Venta ---------- */
+  function selectedRecipe() {
+    return data.recipes.find(recipe => String(recipe.id) === String($('sRecipe').value)) || null;
+  }
+
+  function fillRecipeSelect() {
+    const select = $('sRecipe');
+    const previous = select.value;
+    if (!data.recipes.length) {
+      select.innerHTML = '<option value="">Sin recetas</option>';
+      return;
+    }
+    select.innerHTML = data.recipes.map(recipe => `<option value="${esc(recipe.id)}">${esc(recipe.name)}</option>`).join('');
+    if (previous && [...select.options].some(option => option.value === previous)) select.value = previous;
+    if (!select.value) select.selectedIndex = 0;
+  }
+
+  function setSalePrice() {
+    const recipe = selectedRecipe();
+    if (!recipe) {
+      $('sHint').textContent = 'Añade una receta para registrar ventas.';
+      return;
+    }
+    if (!$('sPrice').dataset.manual) $('sPrice').value = num(recipe.price).toFixed(2);
+    $('sHint').textContent = `Costo estimado por porción: ${money(cost(recipe))}`;
+  }
+
+  function updateSaleTotal() {
+    $('saleTotal').textContent = money(Math.max(0, num($('sQty').value)) * Math.max(0, num($('sPrice').value)));
+  }
+
+  /* ---------- Receta ---------- */
+  const RECIPE_FIELDS = {
+    id: 'rId', name: 'rName', milk: 'rMilk', milkPrice: 'rMilkPrice', base: 'rBase',
+    ess: 'rEss', essYield: 'rEssYield', stab: 'rStab', stabYield: 'rStabYield',
+    yield: 'rYield', cone: 'rCone', napkin: 'rNapkin', other: 'rOther', price: 'rPrice', notes: 'rNotes'
+  };
+
+  function readRecipe() {
+    const value = id => num($(id).value);
+    return {
+      id: $('rId').value,
+      name: $('rName').value.trim(),
+      milk: value('rMilk'), milkPrice: value('rMilkPrice'), base: value('rBase'),
+      ess: value('rEss'), essYield: value('rEssYield'), stab: value('rStab'),
+      stabYield: value('rStabYield'), yield: value('rYield'), cone: value('rCone'),
+      napkin: value('rNapkin'), other: value('rOther'), price: value('rPrice'),
+      notes: $('rNotes').value.trim()
+    };
+  }
+
+  function previewRecipe() {
+    const recipe = readRecipe();
+    const recipeCost = cost(recipe);
+    const price = num(recipe.price);
+    const margin = price - recipeCost;
+    $('rPreviewCost').textContent = money(recipeCost);
+    $('rPreviewPrice').textContent = money(price);
+    $('rPreviewMargin').textContent = money(margin);
+    $('rPreviewMargin').classList.toggle('neg', margin < 0);
+  }
+
+  function resetRecipeForm() {
+    $('recipeForm').reset();
+    $('rId').value = '';
+    $('rTitle').textContent = 'Añadir receta';
+    previewRecipe();
+  }
+
+  function editRecipe(id) {
+    const recipe = data.recipes.find(item => String(item.id) === String(id));
+    if (!recipe) return;
+    Object.entries(RECIPE_FIELDS).forEach(([key, elementId]) => {
+      const value = recipe[key];
+      $(elementId).value = value === undefined || value === null ? '' : value;
+    });
+    $('rTitle').textContent = 'Editar receta';
+    previewRecipe();
+    $('recipeFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------- Gastos ---------- */
+  function resetExpenseForm() {
+    $('expenseForm').reset();
+    $('eDate').value = today();
+  }
+
+  /* ---------- Inventario ---------- */
+  function resetStockForm() {
+    $('stockForm').reset();
+    $('iId').value = '';
+    $('iMin').value = 1;
+    $('iCost').value = 0;
+    $('iTitle').textContent = 'Añadir artículo';
+  }
+
+  function editStock(id) {
+    const item = data.stock.find(row => String(row.id) === String(id));
+    if (!item) return;
+    $('iId').value = item.id;
+    $('iName').value = item.name || '';
+    $('iQty').value = item.qty ?? '';
+    $('iUnit').value = item.unit || 'g';
+    $('iMin').value = item.min ?? 1;
+    $('iCost').value = item.cost ?? 0;
+    $('iTitle').textContent = 'Editar artículo';
+    $('stockFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------- Exportar / importar ---------- */
+  function toBase64(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunk, bytes.length)));
+    }
+    return btoa(binary);
+  }
+
+  function downloadWeb(name, text, mime) {
+    const blob = new Blob([text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  async function exportFile(name, text, mime) {
+    if (isNative && Filesystem && Share) {
+      try {
+        const result = await Filesystem.writeFile({
+          path: name,
+          data: toBase64(text),
+          directory: 'CACHE',
+          recursive: true
+        });
+        await Share.share({ title: name, files: [result.uri], dialogTitle: 'Guardar o compartir' });
+        return true;
+      } catch (error) {
+        console.error('No se pudo compartir:', error);
+        const message = String(error && error.message ? error.message : error).toLowerCase();
+        if (message.includes('cancel')) return false;
+        toast('No se pudo compartir el archivo. Inténtalo de nuevo.');
+        return false;
+      }
+    }
+    downloadWeb(name, text, mime);
+    return true;
+  }
+
+  function csvText(rows) {
+    return '\ufeff' + rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  }
+
+  const recipeRows = () => [
+    ['Sabor', 'Leche g', 'Costo leche/kg', 'Base/receta', 'Esencia/envase', 'Recetas/esencia', 'Estabilizante/envase', 'Recetas/estabilizante', 'Porciones/receta', 'Barquilla/porción', 'Servilleta/porción', 'Otros/receta', 'Costo/porción', 'Precio/porción', 'Margen/porción', 'Notas'],
+    ...data.recipes.map(recipe => [
+      recipe.name, recipe.milk, recipe.milkPrice, recipe.base, recipe.ess, recipe.essYield,
+      recipe.stab, recipe.stabYield, recipe.yield, recipe.cone, recipe.napkin, recipe.other,
+      cost(recipe).toFixed(2), recipe.price, (num(recipe.price) - cost(recipe)).toFixed(2), recipe.notes
+    ])
+  ];
+  const salesRows = () => [
+    ['Fecha', 'Sabor', 'Porciones', 'Precio unitario', 'Total', 'Costo unitario guardado', 'Costo total guardado', 'Tipo', 'Nota'],
+    ...data.sales.map(sale => [
+      sale.date, sale.flavor, sale.qty, sale.price, num(sale.qty) * num(sale.price),
+      sale.unitCost, num(sale.qty) * num(sale.unitCost), sale.method, sale.note
+    ])
+  ];
+  const expenseRows = () => [
+    ['Fecha', 'Descripción', 'Categoría', 'Pago', 'Monto'],
+    ...data.expenses.map(expense => [expense.date, expense.desc, expense.category, expense.payment, expense.amount])
+  ];
+  const stockRows = () => [
+    ['Artículo', 'Cantidad', 'Unidad', 'Alerta mínima', 'Costo reposición'],
+    ...data.stock.map(item => [item.name, item.qty, item.unit, item.min, item.cost])
+  ];
+
+  async function exportCsv(name, rows) {
+    const ok = await exportFile(name, csvText(rows), 'text/csv;charset=utf-8');
+    if (ok) toast('CSV listo para guardar o compartir.');
+  }
+
+  async function exportBackup() {
+    const name = `respaldo-ninja-creami-${today()}.json`;
+    const ok = await exportFile(name, JSON.stringify(data, null, 2), 'application/json');
+    if (!ok) return;
+    data.meta = Object.assign({}, data.meta, { lastBackup: new Date().toISOString() });
+    save();
+    renderStatus();
+    toast('Copia creada. Guárdala fuera del teléfono.');
+  }
+
+  /* ---------- Eventos ---------- */
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => showPanel(tab.dataset.p));
+  });
+
+  $('sRecipe').addEventListener('change', () => {
+    delete $('sPrice').dataset.manual;
+    setSalePrice();
+    updateSaleTotal();
+  });
+  $('sPrice').addEventListener('input', () => {
+    $('sPrice').dataset.manual = '1';
+    setSalePrice();
+    updateSaleTotal();
+  });
+  $('sQty').addEventListener('input', updateSaleTotal);
+
+  $('saleForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!event.target.reportValidity()) return;
+    const recipe = selectedRecipe();
+    if (!recipe) return toast('Primero añade una receta.');
+    const portions = Math.max(1, Math.round(num($('sQty').value)));
+    const price = Math.max(0, num($('sPrice').value));
+    if (!Number.isFinite(portions) || !Number.isFinite(price)) return toast('Revisa las porciones y el precio.');
+    data.sales.push({
+      id: uid(),
+      date: $('sDate').value || today(),
+      flavor: recipe.name,
+      qty: portions,
+      price,
+      unitCost: cost(recipe),
+      method: $('sMethod').value,
+      note: $('sNote').value.trim()
+    });
+    save('Venta guardada.');
+    $('sQty').value = 1;
+    $('sNote').value = '';
+    delete $('sPrice').dataset.manual;
+    renderAll();
+  });
+
+  $('recipeForm').addEventListener('input', previewRecipe);
+  $('recipeForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!event.target.reportValidity()) return;
+    const recipe = readRecipe();
+    if (!recipe.name) return toast('Escribe el nombre del sabor.');
+    if (!recipe.id) recipe.id = uid();
+    const index = data.recipes.findIndex(item => String(item.id) === String(recipe.id));
+    if (index < 0) data.recipes.push(recipe);
+    else data.recipes[index] = recipe;
+    save('Receta guardada.');
+    resetRecipeForm();
+    renderAll();
+  });
+  $('rClear').addEventListener('click', resetRecipeForm);
+  $('newRecipe').addEventListener('click', () => {
+    resetRecipeForm();
+    $('recipeFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  $('recipeList').addEventListener('click', event => {
+    const edit = event.target.closest('[data-edit-r]');
+    const del = event.target.closest('[data-del-r]');
+    if (edit) editRecipe(edit.dataset.editR);
+    if (del && confirm('¿Borrar esta receta? Las ventas ya guardadas no se borrarán.')) {
+      data.recipes = data.recipes.filter(item => String(item.id) !== String(del.dataset.delR));
+      if (String($('rId').value) === String(del.dataset.delR)) resetRecipeForm();
+      save('Receta borrada.');
+      renderAll();
+    }
+  });
+
+  $('expenseForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!event.target.reportValidity()) return;
+    const amount = num($('eAmount').value);
+    const description = $('eDesc').value.trim();
+    if (!description) return toast('Escribe una descripción del gasto.');
+    if (amount <= 0) return toast('El monto debe ser mayor que cero.');
+    data.expenses.push({
+      id: uid(),
+      date: $('eDate').value || today(),
+      amount,
+      category: $('eCategory').value,
+      payment: $('ePayment').value,
+      desc: description
+    });
+    save('Gasto guardado.');
+    $('eAmount').value = '';
+    $('eDesc').value = '';
+    renderAll();
+  });
+
+  $('expenseList').addEventListener('click', event => {
+    const del = event.target.closest('[data-del-e]');
+    if (del && confirm('¿Borrar este gasto?')) {
+      data.expenses = data.expenses.filter(item => String(item.id) !== String(del.dataset.delE));
+      save('Gasto borrado.');
+      renderAll();
+    }
+  });
+
+  $('stockForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!event.target.reportValidity()) return;
+    const name = $('iName').value.trim();
+    if (!name) return toast('Escribe el nombre del artículo.');
+    const item = {
+      id: $('iId').value || uid(),
+      name,
+      qty: Math.max(0, num($('iQty').value)),
+      unit: $('iUnit').value,
+      min: Math.max(0, num($('iMin').value)),
+      cost: Math.max(0, num($('iCost').value))
+    };
+    const index = data.stock.findIndex(row => String(row.id) === String(item.id));
+    if (index < 0) data.stock.push(item);
+    else data.stock[index] = item;
+    save('Inventario actualizado.');
+    resetStockForm();
+    renderAll();
+  });
+  $('iClear').addEventListener('click', resetStockForm);
+
+  $('stockList').addEventListener('click', event => {
+    const edit = event.target.closest('[data-edit-i]');
+    const del = event.target.closest('[data-del-i]');
+    if (edit) editStock(edit.dataset.editI);
+    if (del && confirm('¿Borrar este artículo del inventario?')) {
+      data.stock = data.stock.filter(item => String(item.id) !== String(del.dataset.delI));
+      if (String($('iId').value) === String(del.dataset.delI)) resetStockForm();
+      save('Artículo borrado.');
+      renderAll();
+    }
+  });
+
+  $('salesList').addEventListener('click', event => {
+    const del = event.target.closest('[data-del-s]');
+    if (del && confirm('¿Borrar esta venta?')) {
+      data.sales = data.sales.filter(item => String(item.id) !== String(del.dataset.delS));
+      save('Venta borrada.');
+      renderAll();
+    }
+  });
+
+  $('salesCsv').addEventListener('click', () => exportCsv('ventas-ninja-creami.csv', salesRows()));
+  $('allSalesCsv').addEventListener('click', () => exportCsv('ventas-ninja-creami.csv', salesRows()));
+  $('expensesCsv').addEventListener('click', () => exportCsv('gastos-ninja-creami.csv', expenseRows()));
+  $('allExpensesCsv').addEventListener('click', () => exportCsv('gastos-ninja-creami.csv', expenseRows()));
+  $('recipeCsv').addEventListener('click', () => exportCsv('recetas-ninja-creami.csv', recipeRows()));
+  $('stockCsv').addEventListener('click', () => exportCsv('inventario-ninja-creami.csv', stockRows()));
+  $('stockCsv2').addEventListener('click', () => exportCsv('inventario-ninja-creami.csv', stockRows()));
+
+  $('backupBtn').addEventListener('click', exportBackup);
+  $('restoreBtn').addEventListener('click', () => $('restoreFile').click());
+  $('restoreFile').addEventListener('change', async event => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text());
+      if (!parsed || !Array.isArray(parsed.recipes) || !Array.isArray(parsed.sales) || !Array.isArray(parsed.expenses) || !Array.isArray(parsed.stock)) {
+        throw new Error('formato');
+      }
+      if (!confirm('Restaurar reemplazará todos los datos actuales. ¿Continuar?')) return;
+      data = normalize(parsed);
+      resetRecipeForm();
+      resetExpenseForm();
+      resetStockForm();
+      save('Copia restaurada.');
+      renderAll();
+    } catch (_) {
+      alert('Archivo no válido. Usa una copia JSON creada por esta app.');
+    } finally {
+      event.target.value = '';
+    }
+  });
+
+  $('wipe').addEventListener('click', () => {
+    if (!confirm('¿Borrar todos los datos? Esta acción no se puede deshacer.')) return;
+    if (!confirm('Última confirmación: se borrarán recetas, ventas, gastos e inventario.')) return;
+    data = emptyData();
+    resetRecipeForm();
+    resetExpenseForm();
+    resetStockForm();
+    save('Datos reiniciados.');
+    renderAll();
+    showPanel('home');
+  });
+
+  /* ---------- Sistema ---------- */
+  function applySystemBars() {
+    if (!SystemBars || !SystemBars.setStyle) return;
+    try {
+      SystemBars.setStyle({ bar: 'StatusBar', style: 'DARK' }).catch(() => {});
+      const darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+      const setNavigation = () => {
+        SystemBars.setStyle({ bar: 'NavigationBar', style: darkQuery && darkQuery.matches ? 'DARK' : 'LIGHT' }).catch(() => {});
+      };
+      setNavigation();
+      if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', setNavigation);
+    } catch (_) {}
+  }
+
+  function wireBackButton() {
+    if (!NativeApp || !NativeApp.addListener) return;
+    try {
+      NativeApp.addListener('backButton', () => {
+        if (currentPanel !== 'home') showPanel('home');
+        else NativeApp.exitApp();
+      });
+    } catch (_) {}
+  }
+
+  async function boot() {
+    $('sDate').value = today();
+    $('eDate').value = today();
+    try {
+      await loadData();
+    } catch (error) {
+      console.error(error);
+      data = emptyData();
+      save();
+    }
+    loaded = true;
+    renderAll();
+    try { applySystemBars(); } catch (_) {}
+    try { wireBackButton(); } catch (_) {}
+    document.body.classList.add('ready');
+    setTimeout(() => {
+      const bootEl = $('boot');
+      if (bootEl) bootEl.remove();
+    }, 300);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
