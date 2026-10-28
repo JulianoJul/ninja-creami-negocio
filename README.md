@@ -14,7 +14,7 @@ App Android personal para llevar el control de un pequeño negocio de helados Ni
 
 ## Descargar e instalar
 
-1. Descarga el APK desde la sección [Releases](../../releases).
+1. Descarga el APK desde la sección [Releases](../../releases) o directamente desde [NinjaCreami-v1.0.0.apk](https://github.com/JulianoJul/ninja-creami-negocio/releases/download/v1.0.0/NinjaCreami-v1.0.0.apk).
 2. En el teléfono, abre el archivo y permite la instalación desde esa fuente si Android lo solicita.
 3. La app se instala como **Ninja Creami** y no necesita permisos especiales.
 
